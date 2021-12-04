@@ -49,12 +49,17 @@ def getImgData(imagefile):
 
     # We want to flatten each image from a 28 x 28 to a 784 x 1 numpy array
     # CODE GOES HERE
-    features = cv(images.flatten())
-
+    features = []
+    for row in images:
+        featureVec = cv(row.flatten())
+        featureVec = featureVec / 255
+        features.append(featureVec)
+    
+    print(np.shape(features))
     # convert to floats in [0,1] (only really necessary if you have other features, but we'll do it anyways)
     # CODE GOES HERE
-    print(features / 255)
-    return (features / 255)
+    # print(features[300:400] / 255)
+    return features
 
 
 # reads the data from the four MNIST files,
@@ -62,9 +67,21 @@ def getImgData(imagefile):
 # returns a tuple (trainingData, testingData), each of which is a zipped array of features and labels
 def prepData():
     ntrain, train_labels = getLabels(trainingLabelFile)
+    ntest, test_labels = getLabels(testingLabelFile)
 
     # CODE GOES HERE
        
+    trainingFeatures = getImgData(trainingImageFile)
+    trainingLabels = [onehot(label, 10) for label in train_labels]
+    print(f"Number of training samples: {ntrain}")
+
+    testingFeatures = getImgData(testingImageFile)
+    testingLabels = test_labels
+    # print(testingLabels[300:400])
+    print(f"Number of testing samples: {ntest}")
+
+    trainingData = zip(trainingFeatures, trainingLabels)
+    testingData = zip(testingFeatures, testingLabels)
     return (trainingData, testingData)
     
 
