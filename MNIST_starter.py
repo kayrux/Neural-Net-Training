@@ -46,14 +46,15 @@ def getLabels(labelfile):
 def getImgData(imagefile):
     # returns an array whose entries are each (28x28) pixel arrays with values from 0 to 255.0
     images = idx2numpy.convert_from_file(imagefile) 
-    
+
     # We want to flatten each image from a 28 x 28 to a 784 x 1 numpy array
     # CODE GOES HERE
-    
+    features = cv(images.flatten())
+
     # convert to floats in [0,1] (only really necessary if you have other features, but we'll do it anyways)
     # CODE GOES HERE
-   
-    return features
+    print(features / 255)
+    return (features / 255)
 
 
 # reads the data from the four MNIST files,
