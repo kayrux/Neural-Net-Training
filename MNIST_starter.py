@@ -1,6 +1,7 @@
 import numpy as np
 import idx2numpy
 import network
+import time
 
 # converts a 1d python list into a (1,n) row vector
 def rv(vec):
@@ -90,9 +91,12 @@ def prepData():
 
 
 trainingData, testingData = prepData()
-# net = network.loadFromFile("part1.pkl")
-net = network.Network([784,30,20,10])
+net = network.loadFromFile("part1.pkl")
+# net = network.Network([784,30,20,10])
+startTime = time.time_ns()
+# net.SGD(trainingData, 2, 10, .8, test_data = testingData)
 net.SGD(trainingData, 30, 10, .8, test_data = testingData)
+print(f"Time elapsed: {(time.time_ns() - startTime) / 1000000000} seconds")
 # network.saveToFile(net, "part1.pkl")
 
 
