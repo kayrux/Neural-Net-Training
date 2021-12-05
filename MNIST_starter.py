@@ -58,7 +58,6 @@ def getImgData(imagefile):
     print(np.shape(features))
     # convert to floats in [0,1] (only really necessary if you have other features, but we'll do it anyways)
     # CODE GOES HERE
-    # print(features[300:400] / 255)
     return features
 
 
@@ -69,14 +68,16 @@ def prepData():
     ntrain, train_labels = getLabels(trainingLabelFile)
     ntest, test_labels = getLabels(testingLabelFile)
 
+    #ntrain = int (ntrain * 1/10)
+    #ntest = int (ntest * 1/10)
     # CODE GOES HERE
        
     trainingFeatures = getImgData(trainingImageFile)
-    trainingLabels = [onehot(label, 10) for label in train_labels]
+    trainingLabels = [onehot(label, 10) for label in train_labels[:ntrain]]
     print(f"Number of training samples: {ntrain}")
 
     testingFeatures = getImgData(testingImageFile)
-    testingLabels = test_labels
+    testingLabels = test_labels[:ntest]
     # print(testingLabels[300:400])
     print(f"Number of testing samples: {ntest}")
 
@@ -89,9 +90,12 @@ def prepData():
 
 
 trainingData, testingData = prepData()
+# net = network.loadFromFile("part1.pkl")
+net = network.Network([784,30,20,10])
+net.SGD(trainingData, 30, 10, .8, test_data = testingData)
+# network.saveToFile(net, "part1.pkl")
 
-net = network.Network([784,10,10])
-net.SGD(trainingData, 10, 10, .1, test_data = testingData)
+
 
 
 
