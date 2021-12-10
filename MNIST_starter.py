@@ -40,7 +40,6 @@ def getLabels(labelfile):
     labelarray = bytearray(file.read())
     labelarray = [b for b in labelarray]    # convert to ints
     file.close()
-    
     return n, labelarray
 
 # returns a list containing the pixels for each image, stored as a (784, 1) numpy array
