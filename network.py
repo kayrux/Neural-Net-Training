@@ -170,6 +170,18 @@ class Network(object):
         network's output is assumed to be the index of whichever
         neuron in the final layer has the highest activation."""
         test_results = [(np.argmax(self.feedforward(x)), y) for (x, y) in test_data]
+
+        ####### Failed images #######
+        #count = 0
+        #i = 0
+        #for (x, y) in test_results:
+        #    if (x != y and count < 3): 
+        #        print(f"i = {i}, guess = {x}, label = {y}")
+        #        count = count + 1
+        #    i = i + 1
+        #print(f"i size: {i}")
+        ##############################
+        
         return sum(int(x == y) for (x, y) in test_results)
 
     def cost_derivative(self, output_activations, y):

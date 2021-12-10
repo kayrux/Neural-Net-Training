@@ -1,6 +1,6 @@
 import numpy as np
 import network
-
+import time
 
 # converts a 1d python list into a (1,n) row vector
 def rv(vec):
@@ -16,7 +16,22 @@ def onehot(i, size):
     vec[i] = 1
     return cv(vec)
 
+# returns a list containing the pixels for each image, stored as a (784, 1) numpy array
+def prepArray(arrayImages):
+
+    # We want to flatten each image from a 28 x 28 to a 784 x 1 numpy array
+    # CODE GOES HERE
+    features = []
+    for row in arrayImages:
+        featureVec = cv(row.flatten())
+        featureVec = featureVec / 255
+        features.append(featureVec)
     
+    print(np.shape(features))
+    # convert to floats in [0,1] (only really necessary if you have other features, but we'll do it anyways)
+    # CODE GOES HERE
+    return features
+  
 #################################################################
 
 # reads the data from the notMNIST.npz file,
@@ -32,17 +47,25 @@ def prepData():
         
     # need to rescale, flatten, convert training labels to one-hot, and zip appropriate components together
     # CODE GOES HERE
-    
-       
+    training_features = prepArray(train_features)
+    testing_features = prepArray(test_features)
+    trainingLabels = [onehot(label, 10) for label in train_labels]
+
+
+    trainingData = zip(training_features, trainingLabels)
+    testingData = zip(testing_features, test_labels)
     return (trainingData, testingData)
+       
     
 ###################################################################
 
 
 trainingData, testingData = prepData()
 
+startTime = time.time_ns()
 net = network.Network([784,10])
 net.SGD(trainingData, 10, 10, 10, test_data = testingData)
+print(f"Time elapsed: {(time.time_ns() - startTime) / 1000000000} seconds")
 
 
 
