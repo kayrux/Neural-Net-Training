@@ -29,8 +29,17 @@ def standardize(x, mu, sigma):
 def readData(filename):
 
     # CODE GOES HERE
-    
-    return n, features, labels
+    n = 0
+    features = []
+    labels = []
+    with open("data/heart.csv", "rt") as f:
+        data = csv.reader(f)
+        for row in data:
+            features.append(row[1:10])
+            labels.append(row[10])
+            n += 1
+
+    return n - 1, features, labels
 
 
 ################################################

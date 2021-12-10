@@ -90,9 +90,11 @@ def prepData():
 
 
 trainingData, testingData = prepData()
-net = network.loadFromFile("part1.pkl")
+# net = network.loadFromFile("part1.pkl")
+net = network.Network([784, 10, 10])
 startTime = time.time_ns()
-net.SGD(trainingData, 30, 10, 0.7, test_data = testingData)
+
+net.SGD(trainingData, 10, 10, 0.1, test_data = testingData)
 print(f"Time elapsed: {(time.time_ns() - startTime) / 1000000000} seconds")
 # network.saveToFile(net, "part1.pkl")
 
