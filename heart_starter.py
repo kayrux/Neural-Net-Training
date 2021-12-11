@@ -29,11 +29,10 @@ def standardize(x, mu, sigma):
 # and returns them as a tuple
 def readData(filename):
 
-    # CODE GOES HERE
     n = 0
     features = []
     labels = []
-    with open("data/heart.csv", "rt") as f:
+    with open(filename, 'rt') as f:
         
         data = csv.reader(f)
         for row in data:
@@ -41,18 +40,17 @@ def readData(filename):
                 n += 1
                 continue
             features.append(cv(row[1:10]))
-            #print(type(row[10]))
             labels.append(float(row[10]))
             n += 1
     
-
+    
     # print(labels)
     return n - 1, features, labels
 
 
 ################################################
 
-# Calculates the mean, standard deviation, and max age from the given array
+# calculates the mean, standard deviation, and max age from the given array
 # Returns a tuple of (means, std_devs, max_age)
 def get_means_stdDevs_maxAge(features):
     means = []
@@ -106,18 +104,13 @@ def get_means_stdDevs_maxAge(features):
 # divides the data into training and testing sets, and encodes the training vectors in onehot form
 # returns a tuple (trainingData, testingData), each of which is a zipped array of features and labels
 def prepData():
-# - Family history should be stored as a boolean
-# - Age column should be rescaled
-# - All other rows should be converted to z scores
-# - You’ll have to calculate the average and standard deviation yourself from the
-#   data in the file
     feature_vectors = []
     n, features, labels = readData('data/heart.csv')
     means, std_devs, max_age = get_means_stdDevs_maxAge(features)
 
     for row in features:
         # print(row)
-        sbp = standardize( float(row[0]), means[0], std_devs[0])
+        sbp = standardize(float(row[0]), means[0], std_devs[0])
         tobacco = standardize(float(row[1]), means[1], std_devs[1])
         ldl = standardize(float(row[2]), means[2], std_devs[2])
         adiposity = standardize(float(row[3]), means[3], std_devs[3])
@@ -146,7 +139,6 @@ def prepData():
     testingData = zip(testingFeatures, testingLabels)
     # print(f"Number of testing samples: {n - n_train}")
     
-    # CODE GOES HERE
 
     return (trainingData, testingData)
 
@@ -156,10 +148,12 @@ def prepData():
 
 trainingData, testingData = prepData()
 
-net = network.Network([9,10,2])
 startTime = time.time_ns()
-net.SGD(trainingData, 10, 10, .1, test_data = testingData)
+# net = network.Network([9,10,2])
+net = network.loadFromFile("part3.pkl")
+net.SGD(trainingData, 25, 10, 1, test_data = testingData)
 print(f"Time elapsed: {(time.time_ns() - startTime) / 1000000000} seconds")
+# network.saveToFile(net, "part3.pkl")
 
 
        
